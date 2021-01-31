@@ -5,6 +5,7 @@ import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import generateToken from "../utils/generateToken.js";
 
 dotenv.config();
 
@@ -115,7 +116,7 @@ app.post("/api/user/login", async (req, res) => {
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
-        token: "generateToken(user._id)",
+        token: generateToken(user._id),
       });
     } else {
       response.status(401);
