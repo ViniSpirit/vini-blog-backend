@@ -127,6 +127,4 @@ app.post("/api/user/login", async (req, res) => {
   }
 });
 
-app.listen(8000, () => {
-  console.log("Server running on port 8000");
-});
+app.listen(procces.env.PORT || 8000);
