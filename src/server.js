@@ -39,92 +39,92 @@ app.post("/api/createpost", async (req, res) => {
   }
 });
 
-app.delete("/api/deletepost/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const deletePost = await Post.deleteOne({ _id: id });
-    res.json({});
-  } catch (error) {
-    console.error(error.message);
-  }
-});
+// app.delete("/api/deletepost/:id", async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const deletePost = await Post.deleteOne({ _id: id });
+//     res.json({});
+//   } catch (error) {
+//     console.error(error.message);
+//   }
+// });
 
-app.put("/api/updatepost/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const { title, body } = req.body;
-    const findPost = await Post.findById(id);
+// app.put("/api/updatepost/:id", async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const { title, body } = req.body;
+//     const findPost = await Post.findById(id);
 
-    findPost.title = title;
-    findPost.body = body;
+//     findPost.title = title;
+//     findPost.body = body;
 
-    findPost.save();
+//     findPost.save();
 
-    res.json(findPost);
-  } catch (error) {
-    console.error(error.message);
-  }
-});
+//     res.json(findPost);
+//   } catch (error) {
+//     console.error(error.message);
+//   }
+// });
 
 // Users Routes
 
-app.post("/api/user", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    const userExist = await User.findOne({ email: email });
-    if (userExist) {
-      res.status(400).send();
-      throw new Error("User alredy exists");
-    }
-    const salt = await bcrypt.genSalt();
+// app.post("/api/user", async (req, res) => {
+//   try {
+//     const { name, email, password } = req.body;
+//     const userExist = await User.findOne({ email: email });
+//     if (userExist) {
+//       res.status(400).send();
+//       throw new Error("User alredy exists");
+//     }
+//     const salt = await bcrypt.genSalt();
 
-    const hashedPassword = await bcrypt.hash(password, salt);
+//     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const createUser = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-    });
+//     const createUser = await User.create({
+//       name,
+//       email,
+//       password: hashedPassword,
+//     });
 
-    if (createUser) {
-      res.status(201).json({
-        _id: createUser._id,
-        name: createUser.name,
-        email: createUser.email,
-        isAdmin: createUser.isAdmin,
-      });
-    } else {
-      response.status(404);
-      throw new Error("User not found");
-    }
-  } catch (error) {
-    res.json({ error: error.message });
-    console.error(error.message);
-  }
-});
+//     if (createUser) {
+//       res.status(201).json({
+//         _id: createUser._id,
+//         name: createUser.name,
+//         email: createUser.email,
+//         isAdmin: createUser.isAdmin,
+//       });
+//     } else {
+//       response.status(404);
+//       throw new Error("User not found");
+//     }
+//   } catch (error) {
+//     res.json({ error: error.message });
+//     console.error(error.message);
+//   }
+// });
 
-app.post("/api/user/login", async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email: email });
-  if (!user) {
-    res.status(400).json({ error: "user not found" });
-  }
-  try {
-    if (await bcrypt.compare(password, user.password)) {
-      res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        token: generateToken(user._id),
-      });
-    } else {
-      response.status(401);
-      throw new Error("Invalid email or password");
-    }
-  } catch (error) {
-    res.status(500).send();
-  }
-});
+// app.post("/api/user/login", async (req, res) => {
+//   const { email, password } = req.body;
+//   const user = await User.findOne({ email: email });
+//   if (!user) {
+//     res.status(400).json({ error: "user not found" });
+//   }
+//   try {
+//     if (await bcrypt.compare(password, user.password)) {
+//       res.json({
+//         _id: user._id,
+//         name: user.name,
+//         email: user.email,
+//         isAdmin: user.isAdmin,
+//         token: generateToken(user._id),
+//       });
+//     } else {
+//       response.status(401);
+//       throw new Error("Invalid email or password");
+//     }
+//   } catch (error) {
+//     res.status(500).send();
+//   }
+// });
 
 app.listen(process.env.PORT || 8000);
